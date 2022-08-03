@@ -15,21 +15,19 @@ export type User ={
   username :string,
   email :string,
   phone :string,  
-  password :string,
+  hash_password :string,
   creation_date?:Date
 }
 
 export class userController{
     async create(u: User): Promise<User> {
         try {
-          console.log(ENV)
-          console.log(BCRYBT_PASSWORD)
-          console.log(SALT_ROUNDS)
+        
           const conn = await Client.connect()
           const sql = 'INSERT INTO users (username,email,phone,hash_password) VALUES($1,$2,$3,$4) RETURNING *'
     
           const hash = bcrypt.hashSync(
-            u.password + BCRYBT_PASSWORD, 
+            u.hash_password + BCRYBT_PASSWORD, 
             parseInt(SALT_ROUNDS as string)
           );
     
@@ -44,14 +42,14 @@ export class userController{
         } 
       }
 
-      // Show Api
+      
       async authenticate(username: string, password: string): Promise<User | null> {
         const conn = await Client.connect()
         const sql = 'SELECT hash_password FROM users WHERE username=($1)'
     
         const result = await conn.query(sql, [username])
     
-        console.log(password+BCRYBT_PASSWORD)
+        console.log("password from user: "+password)
     
         if(result.rows.length) {
     

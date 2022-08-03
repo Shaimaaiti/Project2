@@ -1,9 +1,10 @@
 import express, {Request, Response} from 'express';
+import  morgan from 'morgan';
 import bodyparser from 'body-parser';
 import userRoute from './handlerRoutes/userRoute';
 const app= express();
 const port= 3000
-
+app.use(morgan(':method :url :status '));
 
 app.use(bodyparser.json());
 app.use("/user",userRoute);

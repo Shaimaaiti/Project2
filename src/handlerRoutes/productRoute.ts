@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { Produtc, productController } from '../models/product'
 import { validateProductPost,validateProductUpdate } from '../middelware/inputChecker';
+import verifyAuthToken from "../middelware/authorization";
 import bodyParser from 'body-parser';
 
 const productRoute = express.Router();
@@ -8,7 +9,7 @@ productRoute.use(bodyParser.json())
 
 const product = new productController()
 // All CURD operation there for System of shopping.
-productRoute.get('/', async (req: Request, res: Response): Promise<void> => {
+productRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {
 try {
     const products: Produtc[] = await product.index();
     res.json(products);
@@ -43,7 +44,7 @@ productRoute.get('/:id', async (req: Request, res: Response): Promise<void> => {
     }
 
 });
-
+// create a resource
 productRoute.post('/', validateProductPost,async (req: Request, res: Response): Promise<void> => {
    
  try {
@@ -60,7 +61,7 @@ productRoute.post('/', validateProductPost,async (req: Request, res: Response): 
         res.status(400).send(`bad request. ${error}`);
     }
     
-})
+});
 
 //edit a resource
 productRoute.patch('/:id', validateProductUpdate,async (req: Request, res: Response): Promise<void> => {
@@ -86,7 +87,7 @@ productRoute.patch('/:id', validateProductUpdate,async (req: Request, res: Respo
         res.sendStatus(404)
     }
 
-})
+});
 //delete a resouce
 productRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => {
     const id: number = parseInt(req.params.id as string)
@@ -110,26 +111,6 @@ productRoute.delete('/:id', async (req: Request, res: Response): Promise<void> =
         res.sendStatus(404)
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

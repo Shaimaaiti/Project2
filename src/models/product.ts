@@ -48,7 +48,7 @@ export class productController{
         return result.rows[0]
         
     } catch (error) {
-        throw new Error(`Couldn't insert product of ${product.name}. Error: ${error}`);
+        throw new Error(`Couldn't insert the product. Error: ${error}`);
     }
  }
 
@@ -59,33 +59,8 @@ export class productController{
          
         const sql = 'Update products SET name=($2),count=($3),price=($4) WHERE id=($1) RETURNING *'
         const  result = await conn.query(sql, [id, name, count,price])
-        const  product = result.rows[0]
-        // const nameType: boolean = typeof name !== "undefined";
-      // const countType: boolean = typeof count !== "undefined";
-      // const priceType: boolean = typeof price !== "undefined";
-     
-      // if (nameType && countType && priceType) {
-        
-      // }
-      // else if (name) {
-      //   sql = 'Update products SET name=($2) WHERE id=($1) RETURNING *'
-      //   result = await conn.query(sql, [id, name])
-      //   todo = result.rows[0]
-      // }
-      // else if (price) {
-      //   sql = 'Update products SET price=($2) WHERE id=($1) RETURNING *'
-      //   result = await conn.query(sql, [id, price])
-      //   todo = result.rows[0]
-      // }
-      // else if (count) {
-      //   sql = 'Update products SET count=($2) WHERE id=($1) RETURNING *'
-      //   result = await conn.query(sql, [id, count])
-      //   todo = result.rows[0]
-      // }
-      // else{
-      //   throw new Error(`No given data valide`);
-      // }
-      conn.release()
+        const  product = result.rows[0]     
+        conn.release()
 
       return product
     } catch (err) {
@@ -109,7 +84,7 @@ export class productController{
 
         return product  
     } catch (err) {
-        throw new Error(`Could not delete article ${id}. Error: ${err}`)
+        throw new Error(`Could not delete product ${id}. Error: ${err}`)
     }
   }
 

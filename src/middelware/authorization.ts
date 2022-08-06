@@ -17,6 +17,7 @@ const {
                 next()
             } catch (error) {
                 res.status(401)
+                res.end();
             }
         }
 

@@ -93,13 +93,10 @@ productRoute.delete('/:id', async (req: Request, res: Response): Promise<void> =
     const id: number = parseInt(req.params.id as string)
     if (id) {
         try {
-            const deleted: Produtc | undefined = await product.delete(id)
-            if (deleted) {
-                res.sendStatus(204)
-            }
-            else {
-                res.status(404).send('resource not found')
-            }
+             await product.delete(id)
+           
+             res.sendStatus(204)
+            
         }
         catch (err) {
             console.log(err)

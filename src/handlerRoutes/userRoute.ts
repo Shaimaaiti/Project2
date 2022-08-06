@@ -42,8 +42,60 @@ userRoute.post('/login', async (req: Request, res: Response): Promise<void> => {
         res.status(400).send("bad request")
     }
 })
-
-
+userRoute.get('/', async (req: Request, res: Response): Promise<void> => {
+    try {
+        const users: User[] = await user.index();
+        res.json(users);
+    } catch (err) {
+        console.log(err)
+                res.status(500).send(err)
+    }
+    
+    });
+    
+    userRoute.get('/:id', async (req: Request, res: Response): Promise<void> => {
+        const id: number = parseInt(req.params.id as string)
+        if (id) {
+            try {
+                const requestUser= await user.show(id)
+    
+                if (requestUser) {
+                    res.json(requestUser)
+                }
+                else {
+                    res.status(404).send('resource not found')
+                }
+            }
+            catch (err) {
+                console.log(err)
+                res.status(500).send(err)
+            }
+    
+        }
+        else {
+            res.sendStatus(404)
+        }
+    
+    });
+    userRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => {
+        const id: number = parseInt(req.params.id as string)
+        if (id) {
+            try {
+                 await user.delete(id)
+            
+                res.sendStatus(204)              
+              
+            }
+            catch (err) {
+                console.log(err)
+                res.status(500).send(err)
+            }
+    
+        }
+        else {
+            res.sendStatus(404)
+        }
+    });
 
 export default userRoute;
 

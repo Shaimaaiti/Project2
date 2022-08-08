@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import { User, userController } from '../models/user'
 import bodyParser from 'body-parser';
 import getAuthToken from "../utilities/authentication"
+import verifyAuthToken from "../middelware/authorization";
 
 const userRoute = express.Router();
 userRoute.use(bodyParser.json())
@@ -42,7 +43,8 @@ userRoute.post('/login', async (req: Request, res: Response): Promise<void> => {
         res.status(400).send("bad request")
     }
 })
-userRoute.get('/', async (req: Request, res: Response): Promise<void> => {
+// index
+userRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {
     try {
         const users: User[] = await user.index();
         res.json(users);
@@ -52,8 +54,8 @@ userRoute.get('/', async (req: Request, res: Response): Promise<void> => {
     }
     
     });
-    
-    userRoute.get('/:id', async (req: Request, res: Response): Promise<void> => {
+    // show
+    userRoute.get('/:id', verifyAuthToken,async (req: Request, res: Response): Promise<void> => {
         const id: number = parseInt(req.params.id as string)
         if (id) {
             try {
@@ -77,6 +79,8 @@ userRoute.get('/', async (req: Request, res: Response): Promise<void> => {
         }
     
     });
+
+    // delete
     userRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => {
         const id: number = parseInt(req.params.id as string)
         if (id) {

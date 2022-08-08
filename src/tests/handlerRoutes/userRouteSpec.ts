@@ -36,7 +36,8 @@ describe("User handler", () => {
         const newUser= await user.create(postedUser as User)
         userHandler.post(loginUrl,async function(request:express.Request,response:express.Response,_error:any) {
           request.body={username:newUser.username,password:postedUser.hash_password};
-          expect(response.statusCode).toBe(200);       
+          expect(response.statusCode).toBe(200); 
+               
          });
       });
 

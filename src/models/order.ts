@@ -7,12 +7,12 @@ export type Order_Products={
     order_id: number,
     product_id: number,
     quantity :number,
-    total_cost?:number
+    cost?:number
 }
 export type Order={
-    Id? :number,  
-     userId :number,
-     cost?: number
+     id? :number,  
+     userid :number,
+     status?: boolean
 
 }
 export class orderController{
@@ -48,9 +48,9 @@ export class orderController{
 
         try {
             const conn= await Client.connect(); 
-            const sql = 'INSERT INTO orders (userId) VALUES($1) RETURNING *';  
+            const sql = 'INSERT INTO orders (userId,status) VALUES($1,$2) RETURNING *';  
               
-            const result= await conn.query(sql,[order.userId]);
+            const result= await conn.query(sql,[order.userid,false]);
             conn.release();
             return result.rows[0]
             
@@ -60,12 +60,12 @@ export class orderController{
      }
     
     
-     async update(id: number, cost:number): Promise<Order> {
+     async update(id: number, status:boolean): Promise<Order> {
         try {
             const conn = await Client.connect();
              
-            const sql = 'Update orders SET cost=($2) WHERE id=($1) RETURNING *'
-            const  result = await conn.query(sql, [id, cost])
+            const sql = 'Update orders SET status=($2) WHERE id=($1) RETURNING *'
+            const  result = await conn.query(sql, [id, status])
             const  order = result.rows[0]
             
           conn.release()
@@ -95,13 +95,25 @@ export class orderController{
             throw new Error(`Could not delete order ${id}. Error: ${err}`)
         }
     }
+    async getOrders (userId:number):Promise<Order[]>{
 
+        try {
+            const conn= await Client.connect();
+            const sql=`SELECT * FROM orders WHERE userId=($1)`;
+            const result= await conn.query(sql,[userId]);
+            conn.release();
+            return result.rows
+            
+        } catch (error) {
+            throw new Error(`Couldn't return orders. Error: ${error}`);
+        }
+     }
         async addProduct (order:Order_Products):Promise<Order_Products>{
 
             try {
                 const conn= await Client.connect(); 
 
-                const sql = 'INSERT INTO order_products (order_id, product_id,quantity,total_cost) VALUES($1,$2,$3,$4) RETURNING *';  
+                const sql = 'INSERT INTO orders_products (order_id, product_id,quantity,cost) VALUES($1,$2,$3,$4) RETURNING *';  
                 const product= await this.getProduct(order.product_id);                
                 const orderCost= product.price * order.quantity;                
                 const result= await conn.query(sql,[order.order_id,order.product_id,order.quantity,orderCost]);

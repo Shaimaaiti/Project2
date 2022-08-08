@@ -1,3 +1,2 @@
 /* Replace with your SQL commands */
-
-DROP TABLE orderProduct;
+DROP TABLE orders_products;

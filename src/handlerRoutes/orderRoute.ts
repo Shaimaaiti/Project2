@@ -8,10 +8,34 @@ const orderRoute = express.Router();
 orderRoute.use(bodyParser.json())
 
 const order = new orderController();
-
-orderRoute.get('/', async (req: Request, res: Response): Promise<void> => {
+// index
+orderRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {
     try {
-        const orders: Order[] = await order.index();
+        let orders: Order[] = await order.index();
+        
+        const userId: number = parseInt(req.query.userId as string)
+        const statusStr: string = req.query.status as string
+        
+        let status: boolean | undefined
+        if (typeof statusStr !== "undefined") {
+            if (statusStr.toLowerCase() === "true")
+                status = true
+            else if (statusStr.toLowerCase() === "false")
+                status = false
+        }
+        
+        if(!isNaN(userId))
+        {
+            
+            const result:Order[] = orders as Order[]
+            
+            orders = result.filter(o => o.userid === userId)
+           
+        }
+        if (typeof status !== "undefined") {
+            orders = orders.filter(o => o.status === status)
+        }       
+        
         res.json(orders);
     } catch (err) {
         console.log(err)
@@ -19,7 +43,7 @@ orderRoute.get('/', async (req: Request, res: Response): Promise<void> => {
     }
     
     });
-
+// show
     orderRoute.get('/:id', async (req: Request, res: Response): Promise<void> => {
         const id: number = parseInt(req.params.id as string)
         if (id) {
@@ -44,15 +68,16 @@ orderRoute.get('/', async (req: Request, res: Response): Promise<void> => {
         }
     
     });
-
+// create 
     orderRoute.post('/',async (req: Request, res: Response): Promise<void> => {   
         try {
-               const user_Id: string  = req.body.userId
-               //const cost: string  = req.body.cost              
-               const userId= parseInt(user_Id);
-               //const costVal= parseFloat(cost);
-               
-               const postedOrder :Order={userId:userId};
+               const user_Id: number|undefined  = req.body.userId                           
+               const userId= (user_Id as unknown) as number;               
+               if(!userId)
+               {
+                 throw new Error("paramter not number");                 
+               }
+               const postedOrder :Order={userid:userId};
                const newOrder = await order.create(postedOrder);
                res.json(newOrder);
            } catch (error) {
@@ -66,15 +91,17 @@ orderRoute.get('/', async (req: Request, res: Response): Promise<void> => {
     
         if (id) {
             try {
-                const cost: string  = req.body.cost;
-                const costVal= parseFloat(cost);
-                           
-                 const postedOrder = await order.update(id, costVal)
+                const status: boolean|undefined  = req.body.status;               
+                if(!status)
+                {
+                  throw new Error("bad request");                 
+                }
+                 const postedOrder = await order.update(id, status)
                      res.json(postedOrder)
             }
             catch (err) {
                 console.log(err)
-                res.status(500).send(err)
+                res.status(400).send(err)
             }
     
         }
@@ -103,9 +130,32 @@ orderRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => 
         res.sendStatus(404)
     }
 });
+//Current Order by user
+// orderRoute.get('/:userId',verifyAuthToken,async (req: Request, res: Response): Promise<void>=>{
+//     const userId: number = parseInt(req.params.userId as string)
+//     if (userId) {
+//         try {
+//             const orders: Order[]= await order.getOrders(userId)
 
+//             if (orders) {
+//                 res.json(orders)
+//             }
+//             else {
+//                 res.status(404).send('resource not found')
+//             }
+//         }
+//         catch (err) {
+//             console.log(err)
+//             res.status(500).send(err)
+//         }
 
-orderRoute.post('/orders/:id/products',async (req: Request, res: Response): Promise<void> => {   
+//     }
+//     else {
+//         res.sendStatus(404)
+//     }
+// });
+//AddProduct
+orderRoute.post('/orders/:id/products',verifyAuthToken,async (req: Request, res: Response): Promise<void> => {   
     try {
            const product_Id: number  = req.body.product_Id                       
            const order_Id:string= req.params.id;

@@ -9,7 +9,7 @@ productRoute.use(bodyParser.json())
 
 const product = new productController()
 // All CURD operation there for System of shopping.
-productRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {
+productRoute.get('/', async (req: Request, res: Response): Promise<void> => {
 try {
     const products: Produtc[] = await product.index();
     res.json(products);
@@ -45,7 +45,7 @@ productRoute.get('/:id', async (req: Request, res: Response): Promise<void> => {
 
 });
 // create a resource
-productRoute.post('/', validateProductPost,async (req: Request, res: Response): Promise<void> => {
+productRoute.post('/', verifyAuthToken,validateProductPost,async (req: Request, res: Response): Promise<void> => {
    
  try {
         const name: string  = req.body.name

@@ -3,7 +3,7 @@ import { User, userController } from '../../models/user';
 
 const user = new userController();
 const postedUser:User={username:"username",hash_password:"password",email:"email",phone:"phone"} 
-describe("User Controller", () => {
+describe("User Model", () => {
     it('should have a create method', () => {
       expect(user.create).toBeDefined();
     });
@@ -31,5 +31,20 @@ describe("User Controller", () => {
         const userpass= await user.authenticate(newuser.username,postedUser.hash_password);              
          expect((userpass as unknown as User).hash_password).not.toEqual(newuser.hash_password);
        });
+
+       it('index should return []', async () => {
+        const newusers = await user.index();       
+        expect((newusers as unknown as User[] ).length).toBeGreaterThanOrEqual([].length);
+      });
+      it('show should return  user by id', async () => {
+        const newuser = await user.create(postedUser);  
+        const result= await user.show(newuser.id as number)                
+        expect((result as unknown as User ).username).toEqual(newuser.username);
+      });
+      it('delete should success', async () => {
+        const newuser = await user.create(postedUser);       
+        const result= await user.delete(newuser.id as number)         
+        expect((result as unknown as User ).username).toEqual(newuser.username);
+      });
 
 });

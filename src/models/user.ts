@@ -11,7 +11,7 @@ const {
 } = process.env
 
 export type User ={
-  ID? :number,
+  id? :number,
   username :string,
   email :string,
   phone :string,  
@@ -73,7 +73,7 @@ export class userController{
      async delete(id: number): Promise<User> {
         
       try {
-        const sql = 'DELETE FROM users WHERE id=($1)'
+        const sql = 'DELETE FROM users WHERE id=($1) RETURNING *'
           
           const conn = await Client.connect()
   

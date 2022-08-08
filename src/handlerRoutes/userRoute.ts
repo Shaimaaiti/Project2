@@ -81,7 +81,7 @@ userRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise<
     });
 
     // delete
-    userRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => {
+    userRoute.delete('/:id',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {
         const id: number = parseInt(req.params.id as string)
         if (id) {
             try {

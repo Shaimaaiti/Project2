@@ -1,11 +1,13 @@
 import { User, userController } from '../../models/user';
 import express from 'express';
+import getToken from '../../utilities/authentication'
 
 import userHandler from '../../handlerRoutes/userRoute';
 const loginUrl="http://localhost:3000/user/login";
 const signupUrl="http://localhost:3000/user/signup";
+const baseUrl="http://localhost:3000/user";
 const user = new userController();
-
+let newUser:User;
 const postedUser:User={username:"username",hash_password:"password",email:"email",phone:"phone"} 
 
 describe("User handler", () => {
@@ -31,16 +33,51 @@ describe("User handler", () => {
           expect(response.statusMessage).toContain("/login");       
          });
       });
-
+      beforeAll(async () => {
+         newUser = await user.create(postedUser as User) 
+         //newUser= newUser !== undefined? (newUser as User)
+    })
       it('login should return status 200', async () => {
-        const newUser= await user.create(postedUser as User)
+       // const newUser= await user.create(postedUser as User)
         userHandler.post(loginUrl,async function(request:express.Request,response:express.Response,_error:any) {
           request.body={username:newUser.username,password:postedUser.hash_password};
-          expect(response.statusCode).toBe(200); 
-               
-         });
+          expect(response.statusCode).toBe(200);       
+                 
+           });
       });
 
+      it('index should return status 200', async () => {
+          //const newUser= await user.create(postedUser as User)
+          const token= getToken(newUser);
+          const header= `Bearer ${token}`;
+          userHandler.get(baseUrl+"/",async function(request:express.Request,response:express.Response,_error:any) {
+          request.headers.authorization=header;
+          expect(response.statusCode).toBe(200);       
+                 
+           });
+      });
 
+      it('show should return status 200', async () => {
+       // const newUser= await user.create(postedUser as User)
+        const token= getToken(newUser);
+        const header= `Bearer ${token}`;
+        userHandler.get(baseUrl+`/${newUser.id}`,async function(request:express.Request,response:express.Response,_error:any) {
+        request.headers.authorization=header;
+        expect(response.statusCode).toBe(200);       
+               
+         });
+    });
+
+
+    it('delete should return status 204', async () => {
+      const newUser= await user.create(postedUser as User)
+     const token= getToken(newUser);
+     const header= `Bearer ${token}`;
+      userHandler.delete(baseUrl+`/${newUser.id}`,async function(request:express.Request,response:express.Response,_error:any) {
+      request.headers.authorization=header;
+      expect(response.statusCode).toBe(200);       
+             
+       });
+  });
 
 });

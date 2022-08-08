@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { Order, orderController,Order_Products } from '../models/order'
+import { Order, orderController,Orders_Products } from '../models/order'
 import { validateProductPost,validateProductUpdate } from '../middelware/inputChecker';
 import verifyAuthToken from "../middelware/authorization";
 import bodyParser from 'body-parser';
@@ -161,7 +161,7 @@ orderRoute.post('/orders/:id/products',verifyAuthToken,async (req: Request, res:
            const order_Id:string= req.params.id;
            const quantity: number  = req.body.quantity 
            const orderId= parseInt(order_Id);          
-           const postedOrder :Order_Products={order_id:orderId,product_id:product_Id,quantity:quantity};
+           const postedOrder :Orders_Products={order_id:orderId,product_id:product_Id,quantity:quantity};
            const newOrder = await order.addProduct(postedOrder);
            res.json(newOrder);
        } catch (error) {

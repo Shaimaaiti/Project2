@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { Produtc, productController } from '../models/product'
+import { Product, productController } from '../models/product'
 import { validateProductPost,validateProductUpdate } from '../middelware/inputChecker';
 import verifyAuthToken from "../middelware/authorization";
 import bodyParser from 'body-parser';
@@ -11,7 +11,7 @@ const product = new productController()
 // All CURD operation there for System of shopping.
 productRoute.get('/', async (req: Request, res: Response): Promise<void> => {
 try {
-    const products: Produtc[] = await product.index();
+    const products: Product[] = await product.index();
     res.json(products);
 } catch (err) {
     console.log(err)
@@ -54,7 +54,7 @@ productRoute.post('/', verifyAuthToken,validateProductPost,async (req: Request, 
         const countval= parseInt(count);
         const priceval= parseFloat(price);
         
-        const postedProduct :Produtc={name:name,count:countval,price:priceval};
+        const postedProduct :Product={name:name,count:countval,price:priceval};
         const newProduct = await product.create(postedProduct);
         res.json(newProduct);
     } catch (error) {

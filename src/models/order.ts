@@ -1,9 +1,9 @@
 import Client from '../database'
-import { productController, Produtc } from './product'
+import { productController, Product } from './product'
 
 
-export type Order_Products={
-    Id ?:number,
+export type Orders_Products={
+    id ?:number,
     order_id: number,
     product_id: number,
     quantity :number,
@@ -80,7 +80,7 @@ export class orderController{
       async delete(id: number): Promise<Order> {
         
         try {
-          const sql = 'DELETE FROM orders WHERE id=($1)'
+          const sql = 'DELETE FROM orders WHERE id=($1) RETURNING *'
             
             const conn = await Client.connect()
     
@@ -95,20 +95,20 @@ export class orderController{
             throw new Error(`Could not delete order ${id}. Error: ${err}`)
         }
     }
-    async getOrders (userId:number):Promise<Order[]>{
+    // async getOrders (userId:number):Promise<Order[]>{
 
-        try {
-            const conn= await Client.connect();
-            const sql=`SELECT * FROM orders WHERE userId=($1)`;
-            const result= await conn.query(sql,[userId]);
-            conn.release();
-            return result.rows
+    //     try {
+    //         const conn= await Client.connect();
+    //         const sql=`SELECT * FROM orders WHERE userId=($1)`;
+    //         const result= await conn.query(sql,[userId]);
+    //         conn.release();
+    //         return result.rows
             
-        } catch (error) {
-            throw new Error(`Couldn't return orders. Error: ${error}`);
-        }
-     }
-        async addProduct (order:Order_Products):Promise<Order_Products>{
+    //     } catch (error) {
+    //         throw new Error(`Couldn't return orders. Error: ${error}`);
+    //     }
+    //  }
+        async addProduct (order:Orders_Products):Promise<Orders_Products>{
 
             try {
                 const conn= await Client.connect(); 
@@ -125,7 +125,7 @@ export class orderController{
             }
          }
         
-      private async getProduct(id:number):Promise<Produtc>{
+      private async getProduct(id:number):Promise<Product>{
         try {
             const product = new productController();
         const result = product.show(id);

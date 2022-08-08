@@ -8,7 +8,7 @@ const signupUrl="http://localhost:3000/user/signup";
 const baseUrl="http://localhost:3000/user";
 const user = new userController();
 let newUser:User;
-const postedUser:User={username:"username",hash_password:"password",email:"email",phone:"phone"} 
+const postedUser:User={username:"username",hash_password:"password",email:"email@udacity.com",phone:"phone"} 
 
 describe("User handler", () => {
     const body={username:postedUser.username,password:postedUser.hash_password};
@@ -35,10 +35,10 @@ describe("User handler", () => {
       });
       beforeAll(async () => {
          newUser = await user.create(postedUser as User) 
-         //newUser= newUser !== undefined? (newUser as User)
+        
     })
       it('login should return status 200', async () => {
-       // const newUser= await user.create(postedUser as User)
+       
         userHandler.post(loginUrl,async function(request:express.Request,response:express.Response,_error:any) {
           request.body={username:newUser.username,password:postedUser.hash_password};
           expect(response.statusCode).toBe(200);       
@@ -46,8 +46,7 @@ describe("User handler", () => {
            });
       });
 
-      it('index should return status 200', async () => {
-          //const newUser= await user.create(postedUser as User)
+      it('index should return status 200', async () => {          
           const token= getToken(newUser);
           const header= `Bearer ${token}`;
           userHandler.get(baseUrl+"/",async function(request:express.Request,response:express.Response,_error:any) {
@@ -57,8 +56,7 @@ describe("User handler", () => {
            });
       });
 
-      it('show should return status 200', async () => {
-       // const newUser= await user.create(postedUser as User)
+      it('show should return status 200', async () => {       
         const token= getToken(newUser);
         const header= `Bearer ${token}`;
         userHandler.get(baseUrl+`/${newUser.id}`,async function(request:express.Request,response:express.Response,_error:any) {
@@ -71,8 +69,8 @@ describe("User handler", () => {
 
     it('delete should return status 204', async () => {
       const newUser= await user.create(postedUser as User)
-     const token= getToken(newUser);
-     const header= `Bearer ${token}`;
+      const token= getToken(newUser);
+      const header= `Bearer ${token}`;
       userHandler.delete(baseUrl+`/${newUser.id}`,async function(request:express.Request,response:express.Response,_error:any) {
       request.headers.authorization=header;
       expect(response.statusCode).toBe(200);       

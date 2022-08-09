@@ -26,6 +26,7 @@ describe("Product Model", () => {
         const postedProduct:Product= await product.update(result.id as number,result.name as string,result.count as number,15);
         expect(postedProduct.price as number).not.toEqual(result?.price);
       });
+           
       it('delete product by id', async () => {
         const postedProduct:Product= await product.delete((newProduct as unknown as Product ).id as number);
         expect(postedProduct.id).toEqual(newProduct?.id);

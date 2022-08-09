@@ -1,12 +1,12 @@
 {
   "name": "Project2",
   "version": "1.0.0",
-  "description": "image processing",
+  "description": "StoreFrontBackEnd",
   "main": "server.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "prettier": "prettier --config .prettierrc '*.js' --write",
-    "test": "ENV=test db-migrate --env test up && jasmine && db-migrate db:drop test",
+    "test": "cross-env NODE_ENV=test db-migrate --env test up && jasmine && db-migrate db:drop test",
     "build": "npx tsc",
     "start": "nodemon src/server.ts",
     "startjs": "nodemon dist/.",
@@ -28,6 +28,7 @@
     "@types/pg": "^8.6.5",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "cross-env": "^7.0.3",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

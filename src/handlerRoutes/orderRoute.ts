@@ -130,30 +130,7 @@ orderRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => 
         res.sendStatus(404)
     }
 });
-//Current Order by user
-// orderRoute.get('/:userId',verifyAuthToken,async (req: Request, res: Response): Promise<void>=>{
-//     const userId: number = parseInt(req.params.userId as string)
-//     if (userId) {
-//         try {
-//             const orders: Order[]= await order.getOrders(userId)
 
-//             if (orders) {
-//                 res.json(orders)
-//             }
-//             else {
-//                 res.status(404).send('resource not found')
-//             }
-//         }
-//         catch (err) {
-//             console.log(err)
-//             res.status(500).send(err)
-//         }
-
-//     }
-//     else {
-//         res.sendStatus(404)
-//     }
-// });
 //AddProduct
 orderRoute.post('/orders/:id/products',verifyAuthToken,async (req: Request, res: Response): Promise<void> => {   
     try {

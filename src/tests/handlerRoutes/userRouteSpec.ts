@@ -1,6 +1,7 @@
 import { User, userController } from '../../models/user';
 import express from 'express';
-import getToken from '../../utilities/authentication'
+import getToken from '../../utilities/authentication';
+import verifyAuthToken from "../../middelware/authorization";
 
 import userHandler from '../../handlerRoutes/userRoute';
 const loginUrl="http://localhost:3000/user/login";
@@ -49,7 +50,7 @@ describe("User handler", () => {
       it('index should return status 200', async () => {          
           const token= getToken(newUser);
           const header= `Bearer ${token}`;
-          userHandler.get(baseUrl+"/",async function(request:express.Request,response:express.Response,_error:any) {
+          userHandler.get(baseUrl+"/",verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
           request.headers.authorization=header;
           expect(response.statusCode).toBe(200);       
                  
@@ -59,7 +60,7 @@ describe("User handler", () => {
       it('show should return status 200', async () => {       
         const token= getToken(newUser);
         const header= `Bearer ${token}`;
-        userHandler.get(baseUrl+`/${newUser.id}`,async function(request:express.Request,response:express.Response,_error:any) {
+        userHandler.get(baseUrl+`/${newUser.id}`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
         request.headers.authorization=header;
         expect(response.statusCode).toBe(200);       
                
@@ -71,7 +72,7 @@ describe("User handler", () => {
       const newUser= await user.create(postedUser as User)
       const token= getToken(newUser);
       const header= `Bearer ${token}`;
-      userHandler.delete(baseUrl+`/${newUser.id}`,async function(request:express.Request,response:express.Response,_error:any) {
+      userHandler.delete(baseUrl+`/${newUser.id}`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
       request.headers.authorization=header;
       expect(response.statusCode).toBe(200);       
              

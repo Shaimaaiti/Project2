@@ -95,19 +95,7 @@ export class orderController{
             throw new Error(`Could not delete order ${id}. Error: ${err}`)
         }
     }
-    // async getOrders (userId:number):Promise<Order[]>{
-
-    //     try {
-    //         const conn= await Client.connect();
-    //         const sql=`SELECT * FROM orders WHERE userId=($1)`;
-    //         const result= await conn.query(sql,[userId]);
-    //         conn.release();
-    //         return result.rows
-            
-    //     } catch (error) {
-    //         throw new Error(`Couldn't return orders. Error: ${error}`);
-    //     }
-    //  }
+ 
         async addProduct (order:Orders_Products):Promise<Orders_Products>{
 
             try {
@@ -124,7 +112,9 @@ export class orderController{
                 throw new Error(`Couldn't Add a product:${order.product_id} to the order ${order.order_id}:. Error: ${error}`);
             }
          }
-        
+
+
+
       private async getProduct(id:number):Promise<Product>{
         try {
             const product = new productController();

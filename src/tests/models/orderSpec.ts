@@ -44,26 +44,7 @@ describe("Order Model", () => {
       it('delete the order by id', async () => {
         const orderDeleted = await order.delete(newOrder?.id as number)
         expect(orderDeleted.id).toEqual(newOrder?.id);
-      });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      });     
 
 
 

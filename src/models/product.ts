@@ -87,6 +87,4 @@ export class productController{
         throw new Error(`Could not delete product ${id}. Error: ${err}`)
     }
   }
-
-
 }

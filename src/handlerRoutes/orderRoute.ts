@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express'
 import { Order, orderController,Orders_Products } from '../models/order'
-import { validateProductPost,validateProductUpdate } from '../middelware/inputChecker';
 import verifyAuthToken from "../middelware/authorization";
 import bodyParser from 'body-parser';
 

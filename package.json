@@ -1,5 +1,5 @@
 {
-  "name": "Project2",
+  "name": "project2",
   "version": "1.0.0",
   "description": "StoreFrontBackEnd",
   "main": "server.js",
@@ -13,7 +13,11 @@
     "jasmine": "jasmine",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
     "up": "db-migrate up",
-    "down": "db-migrate down"
+    "down": "db-migrate down",
+    "devdb-up": "db-migrate up --config ./database.json --e dev",
+    "devdb-reset": "db-migrate reset --config ./database.json --e dev",
+    "testdb-reset": "db-migrate reset --config ./database.json --e test",
+    "testdb-up": "db-migrate --config ./database.json --e test up"
   },
   "author": "Shaimaa Abdelhamed",
   "license": "ISC",

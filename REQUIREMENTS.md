@@ -5,40 +5,45 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index 
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+- Index  '/product' [GET]
+- Show   '/product/:id' [GET]
+- Create [token required]  '/product' [POST]
+- [OPTIONAL] Top 5 most popular products    /dashboard/most_popular_products [GET]
+
 
 #### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required] '/user' [GET]
+- Show [token required]  '/user/:id' [GET]
+- Create '/user' [POST]
 
 #### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Current Order by user (args: user id)[token required] '/order?userId=${id}' [GET]
+- [OPTIONAL] Completed Orders by user (args: user id)[token required] '/order?userId=${id}&status=true' [GET]
 
 ## Data Shapes
 #### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+-   id :number, // auto generate by db
+ -   name: varchar,
+  -  count: number,
+   - price :number
 
 #### User
-- id
-- firstName
-- lastName
-- password
+ - id :number,// auto generate by db
+ - username :varchar,
+ - email :varchar,
+ - phone :varchar,  
+ - hash_password :varchar,
+ - creation_date:Date // auto generate by db
 
 #### Orders
-- id
-- user_id
-- status of order (active or complete)
+     id :number,  // auto generate by db
+     userid :number,(foreign key to user table)
+     status: boolean // set by default false 
 #### Orders-Products
--id
--id of  order
--id of each product in the order
-- quantity of each product in the order
+    id :number, // auto generate by db
+    order_id: number, (foreign key to order table)
+    product_id: number, (foreign key to product table)
+    quantity :number,
+    cost:number
+
+    

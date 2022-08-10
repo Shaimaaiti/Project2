@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "prettier": "prettier --config .prettierrc '*.js' --write",
-    "test": "cross-env NODE_ENV=test db-migrate --env test up && jasmine && db-migrate db:drop test",
+    "test": "cross-env NODE_ENV=test db-migrate --env test up && jasmine && db-migrate db:drop postgres_test",
     "build": "npx tsc",
     "start": "nodemon src/server.ts",
     "startjs": "nodemon dist/.",

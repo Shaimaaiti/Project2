@@ -27,10 +27,11 @@
 ## Overview
 
 
-### 1.  DB Creation and Migrations
+### 1.  DB Creation and Migrations and running
 
 - to run migrations up on dev environment run `npm run up`, to run migrations down it run `npm run down`
-- to run migrations up on test environment run `npm run build`, after that `npm run test`
+- to run migrations up on test environment run `npm run build`, after that `npm run test` and also to running the unit tests.
+-to run the run the server express by run `npm run start`
 
 - to create a new migration run :db-migrate create users --sql-file
 

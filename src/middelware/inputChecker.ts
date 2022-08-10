@@ -80,4 +80,3 @@ export const validateProductUpdate=(req: Request, res: Response, next:NextFuncti
       next();
   }
  }
-//export default validateSignupInput;

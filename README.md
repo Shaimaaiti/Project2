@@ -131,8 +131,8 @@ https://db-migrate.readthedocs.io/en/latest/Getting%20Started/configuration/
     "status": true
 }
   6- to DELTE spesific order by '/order/${id}' [DELET] 
-
-  ***** to add product to order ***
+**************************************************************
+  *** to add product to order ***
    order/orders/${order_id}/products    [POST]
    body will be: 
    {
@@ -147,7 +147,8 @@ result will be like
     "quantity": 5,
     "cost": "50"
 }
-     ***** Dashboard service ***
+ **************************************************************
+  `Dashboard service` 
      dashboard/most_popular_products [GET]
      result will be like:
      [

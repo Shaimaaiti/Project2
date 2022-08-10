@@ -118,8 +118,8 @@ export class orderController{
       private async getProduct(id:number):Promise<Product>{
         try {
             const product = new productController();
-        const result = product.show(id);
-        return result;
+            const result = product.show(id);
+            return result;
         } catch (error) {
             throw new Error(`Couldn't get  product of ${id}. Error: ${error}`);
         }

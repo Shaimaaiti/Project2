@@ -4,13 +4,9 @@ import getToken from '../../utilities/authentication'
 import orderRoute from '../../handlerRoutes/orderRoute';
 import { Product, productController } from '../../models/product';
 import verifyAuthToken from "../../middelware/authorization";
-import { validateProductPost,validateProductUpdate } from '../../middelware/inputChecker';
 import { Order, orderController,Orders_Products } from '../../models/order'
 
 const baseUrl="http://localhost:3000/order";
-//const addProductToOrderUrl=`http://localhost:3000/order/orders/${}/products`;
-//const userOrderUrl=`http://localhost:3000/order?`;
-
 
 const user = new userController();
 const order = new orderController();
@@ -31,8 +27,10 @@ describe("Order handler", () => {
    // all users
    it('index should return status 200', async () => {         
 
-    orderRoute.get(baseUrl+`/`,async function(request:express.Request,response:express.Response,_error:any) {
- 
+    orderRoute.get(baseUrl+`/`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
+        const token= getToken(newUser);
+        const header= `Bearer ${token}`;
+        request.headers.authorization=header;
         expect(response.statusCode).toBe(200);       
            
              });
@@ -64,24 +62,32 @@ describe("Order handler", () => {
 
     it('show should return status 200', async () => {         
             
-        orderRoute.get(baseUrl+`/${newOrder.id}`,async function(request:express.Request,response:express.Response,_error:any) {
-        console.log(response.json())
+        orderRoute.get(baseUrl+`/${newOrder.id}`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
+            const token= getToken(newUser);
+            const header= `Bearer ${token}`;
+            request.headers.authorization=header;
             expect(response.statusCode).toBe(200);       
                 
                     });
         });
     it('Add product to order should return status 200', async () => {         
         const newProduct= await product.create(postedProduct);
-        orderRoute.get(baseUrl+`/orders/${newOrder.id}/products`,async function(request:express.Request,response:express.Response,_error:any) {
+        orderRoute.get(baseUrl+`/orders/${newOrder.id}/products`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
         request.body={"product_Id": newProduct.id,"quantity":5}
+        const token= getToken(newUser);
+        const header= `Bearer ${token}`;
+        request.headers.authorization=header;
         expect(response.statusCode).toBe(200);       
                 
                     });
         });
     it('update should return status 200', async () => {         
 
-        orderRoute.patch(baseUrl+`/${newOrder.id}`,async function(request:express.Request,response:express.Response,_error:any) {
+        orderRoute.patch(baseUrl+`/${newOrder.id}`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
             request.body={"userId":newUser.id,"status":true}
+            const token= getToken(newUser);
+            const header= `Bearer ${token}`;
+            request.headers.authorization=header;
             expect(response.statusCode).toBe(200);       
                 
                     });
@@ -89,8 +95,10 @@ describe("Order handler", () => {
 
     it('delete should return status 200', async () => {         
 
-        orderRoute.delete(baseUrl+`/${newOrder.id}`,async function(request:express.Request,response:express.Response,_error:any) {
-        
+        orderRoute.delete(baseUrl+`/${newOrder.id}`,verifyAuthToken,async function(request:express.Request,response:express.Response,_error:any) {
+            const token= getToken(newUser);
+            const header= `Bearer ${token}`;
+            request.headers.authorization=header;
             expect(response.statusCode).toBe(200);       
                 
                     });

@@ -91,7 +91,8 @@ export class userController{
 
      
       async authenticate(username: string, password: string): Promise<User | null> {
-        const conn = await Client.connect()
+        try {
+          const conn = await Client.connect()
         const sql = 'SELECT hash_password FROM users WHERE username=($1)'
     
         const result = await conn.query(sql, [username])
@@ -110,6 +111,10 @@ export class userController{
         }
     
         return null
+        } catch (error) {
+          throw new Error(`Could not Authenticate user ${username}. Error: ${error}`)
+        }
+        
       }
 
 

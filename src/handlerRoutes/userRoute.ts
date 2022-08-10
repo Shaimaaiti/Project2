@@ -10,6 +10,7 @@ userRoute.use(bodyParser.json())
 const user = new userController()
 
 userRoute.post('/signup', async (req: Request, res: Response): Promise<void> => {
+try {
     const username: string | undefined = req.body.username;
     const password:string | undefined = req.body.password;
     const email:string | undefined = req.body.email;
@@ -27,21 +28,32 @@ userRoute.post('/signup', async (req: Request, res: Response): Promise<void> => 
     else {
         res.status(400).send("bad request")
     }
+    } catch (error) {
+        console.log(error)
+                res.status(500).send(error)
+    }
+    
 })
 
 userRoute.post('/login', async (req: Request, res: Response): Promise<void> => {
-    const username: string | undefined = req.body.username;
-    const password:string | undefined = req.body.password;
-    console.log("username: "+ username);
+    try {
+        const username: string | undefined = req.body.username;
+        const password:string | undefined = req.body.password;
+        console.log("username: "+ username);
+       
+        if (username && typeof username == 'string' && password) {
+            const newuser = await user.authenticate(username,password);
+            const token= getAuthToken(newuser as User);
+            res.json(token)
+        }
+        else {
+            res.status(400).send("bad request")
+        }
+    } catch (error) {
+        console.log(error)
+                res.status(500).send(error)
+    }
    
-    if (username && typeof username == 'string' && password) {
-        const newuser = await user.authenticate(username,password);
-        const token= getAuthToken(newuser as User);
-        res.json(token)
-    }
-    else {
-        res.status(400).send("bad request")
-    }
 })
 // index
 userRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {

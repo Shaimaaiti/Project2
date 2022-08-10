@@ -43,7 +43,7 @@ orderRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise
     
     });
 // show
-    orderRoute.get('/:id', async (req: Request, res: Response): Promise<void> => {
+    orderRoute.get('/:id', verifyAuthToken,async (req: Request, res: Response): Promise<void> => {
         const id: number = parseInt(req.params.id as string)
         if (id) {
             try {
@@ -68,7 +68,7 @@ orderRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise
     
     });
 // create 
-    orderRoute.post('/',async (req: Request, res: Response): Promise<void> => {   
+    orderRoute.post('/',verifyAuthToken,async (req: Request, res: Response): Promise<void> => {   
         try {
                const user_Id: number|undefined  = req.body.userId                           
                const userId= (user_Id as unknown) as number;               
@@ -84,7 +84,7 @@ orderRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise
            }
            
        });
-       orderRoute.patch('/:id',async (req: Request, res: Response): Promise<void> => {
+       orderRoute.patch('/:id',verifyAuthToken,async (req: Request, res: Response): Promise<void> => {
         //ensure order is found
         const id: number = parseInt(req.params.id as string)  
     
@@ -110,7 +110,7 @@ orderRoute.get('/',verifyAuthToken, async (req: Request, res: Response): Promise
     
     });
     //delete a resouce
-orderRoute.delete('/:id', async (req: Request, res: Response): Promise<void> => {
+orderRoute.delete('/:id',verifyAuthToken, async (req: Request, res: Response): Promise<void> => {
     const id: number = parseInt(req.params.id as string)
     if (id) {
         try {

@@ -8,7 +8,7 @@ const order = new orderController();
  const user = new userController();
  const postedUser:User={username:"username",hash_password:"password",email:"email@udacity.com",phone:"phone"} 
  let newOrder:Order|undefined;
-//const postedOrder:Order={userid=0,}
+
 describe("Order Model", () => {
     it('should have a create method', () => {
         expect(order.create).toBeDefined();
